@@ -1,0 +1,25 @@
+name: FBSkills
+version: '${version}'
+main: com.fbskills.FBSkillsPlugin
+api-version: '1.21'
+folia-supported: true
+author: Sriram
+description: High-performance, multi-platform SMP Skills & Progression plugin for Paper, Purpur, and Folia.
+softdepend:
+  - PlaceholderAPI
+  - Vault
+
+commands:
+  skills:
+    description: FBSkills progression navigation, leaderboards, and administrative tools.
+    aliases: [fbskills, skill, fbskill, progression]
+    permission: fbskills.use
+    usage: /skills [top <skill> | givexp <player> <skill> <amount> | setlevel <player> <skill> <level> | reload]
+
+permissions:
+  fbskills.use:
+    description: Allows players to open the skills menu and view leaderboards.
+    default: true
+  fbskills.admin:
+    description: Grants permission to manage player skill XP, levels, and reload configs.
+    default: op

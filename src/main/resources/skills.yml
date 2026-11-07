@@ -1,0 +1,184 @@
+# ==============================================================================
+# FBSkills - Skill Definitions & XP Rewards
+# Configures the 11 Core SMP Skills with Action-Specific Rewards
+# ==============================================================================
+
+skills:
+  farming:
+    name: "<gradient:#56ab2f:#a8e063><bold>Farming</bold></gradient>"
+    icon: GOLDEN_HOE
+    slot: 10
+    description:
+      - "<gray>Cultivate crops, harvest agricultural goods,</gray>"
+      - "<gray>and master the art of husbandry.</gray>"
+    xp_rewards:
+      WHEAT: 12.0
+      CARROTS: 14.0
+      POTATOES: 14.0
+      BEETROOTS: 18.0
+      NETHER_WART: 25.0
+      MELON: 10.0
+      PUMPKIN: 10.0
+      SUGAR_CANE: 6.0
+      CACTUS: 7.0
+      BAMBOO: 4.0
+      COCOA: 15.0
+      SWEET_BERRY_BUSH: 12.0
+
+  mining:
+    name: "<gradient:#2b5876:#4e4376><bold>Mining</bold></gradient>"
+    icon: DIAMOND_PICKAXE
+    slot: 11
+    description:
+      - "<gray>Extract subterranean wealth, mine rare ores,</gray>"
+      - "<gray>and delve into the deep dark depths.</gray>"
+    xp_rewards:
+      COAL_ORE: 15.0
+      DEEPSLATE_COAL_ORE: 18.0
+      IRON_ORE: 25.0
+      DEEPSLATE_IRON_ORE: 30.0
+      COPPER_ORE: 18.0
+      DEEPSLATE_COPPER_ORE: 22.0
+      GOLD_ORE: 35.0
+      DEEPSLATE_GOLD_ORE: 42.0
+      REDSTONE_ORE: 20.0
+      DEEPSLATE_REDSTONE_ORE: 26.0
+      LAPIS_ORE: 28.0
+      DEEPSLATE_LAPIS_ORE: 34.0
+      DIAMOND_ORE: 85.0
+      DEEPSLATE_DIAMOND_ORE: 110.0
+      EMERALD_ORE: 120.0
+      DEEPSLATE_EMERALD_ORE: 150.0
+      NETHER_QUARTZ_ORE: 22.0
+      NETHER_GOLD_ORE: 24.0
+      ANCIENT_DEBRIS: 300.0
+      OBSIDIAN: 45.0
+      STONE: 1.0
+      DEEPSLATE: 2.0
+
+  excavation:
+    name: "<gradient:#e65c00:#f9d423><bold>Excavation</bold></gradient>"
+    icon: IRON_SHOVEL
+    slot: 12
+    description:
+      - "<gray>Dig through earth, unearth geological fossils,</gray>"
+      - "<gray>and gather terra materials.</gray>"
+    xp_rewards:
+      DIRT: 3.0
+      GRASS_BLOCK: 4.0
+      SAND: 4.0
+      RED_SAND: 5.0
+      GRAVEL: 5.0
+      CLAY: 12.0
+      SOUL_SAND: 8.0
+      SOUL_SOIL: 8.0
+      MUD: 6.0
+      SUSPICIOUS_SAND: 45.0
+      SUSPICIOUS_GRAVEL: 45.0
+
+  forging:
+    name: "<gradient:#f85032:#e73827><bold>Forging</bold></gradient>"
+    icon: ANVIL
+    slot: 13
+    description:
+      - "<gray>Master metallurgy, repair ancient relics,</gray>"
+      - "<gray>and craft legendary gear.</gray>"
+    xp_rewards:
+      anvil_repair_base: 50.0
+      smithing_netherite_upgrade: 250.0
+      craft_diamond_gear: 80.0
+      craft_iron_gear: 25.0
+
+  fishing:
+    name: "<gradient:#36d1dc:#5b86e5><bold>Fishing</bold></gradient>"
+    icon: FISHING_ROD
+    slot: 14
+    description:
+      - "<gray>Cast lines into uncharted waters to retrieve</gray>"
+      - "<gray>rare marine life and ancient aquatic treasures.</gray>"
+    xp_rewards:
+      COD: 30.0
+      SALMON: 35.0
+      TROPICAL_FISH: 50.0
+      PUFFERFISH: 65.0
+      TREASURE: 150.0
+      JUNK: 15.0
+
+  archery:
+    name: "<gradient:#00c6ff:#0072ff><bold>Archery</bold></gradient>"
+    icon: BOW
+    slot: 15
+    description:
+      - "<gray>Hone ballistic accuracy, strike targets at</gray>"
+      - "<gray>extreme range, and master projectile velocity.</gray>"
+    xp_rewards:
+      base_hit: 20.0
+      distance_multiplier: 1.8
+      headshot_bonus: 30.0
+
+  defense:
+    name: "<gradient:#799f0c:#ffe000><bold>Defense</bold></gradient>"
+    icon: SHIELD
+    slot: 16
+    description:
+      - "<gray>Endure formidable blows, parry strikes with</gray>"
+      - "<gray>shields, and fortify natural resilience.</gray>"
+    xp_rewards:
+      damage_taken_ratio: 8.0
+      shield_block_hit: 25.0
+
+  fighting:
+    name: "<gradient:#ed213a:#93291e><bold>Fighting</bold></gradient>"
+    icon: NETHERITE_SWORD
+    slot: 21
+    description:
+      - "<gray>Engage in brutal melee combat, defeat hostile</gray>"
+      - "<gray>monsters, and conquer formidable rivals.</gray>"
+    xp_rewards:
+      ZOMBIE: 25.0
+      SKELETON: 28.0
+      SPIDER: 22.0
+      CREEPER: 35.0
+      ENDERMAN: 60.0
+      BLAZE: 45.0
+      GHAST: 70.0
+      WITHER_SKELETON: 65.0
+      PIGLIN_BRUTE: 90.0
+      WARDEN: 1200.0
+      WITHER: 1500.0
+      ENDER_DRAGON: 2500.0
+      PLAYER: 150.0
+      damage_dealt_ratio: 2.0
+
+  agility:
+    name: "<gradient:#11998e:#38ef7d><bold>Agility</bold></gradient>"
+    icon: FEATHER
+    slot: 22
+    description:
+      - "<gray>Sprint across perilous landscapes, execute leaps,</gray>"
+      - "<gray>and absorb kinetic impact gracefully.</gray>"
+    xp_rewards:
+      sprint_tick_burst: 8.0
+      jump_action: 5.0
+      fall_damage_cushion_ratio: 15.0
+
+  enchanting:
+    name: "<gradient:#b92b27:#1565c0><bold>Enchanting</bold></gradient>"
+    icon: ENCHANTING_TABLE
+    slot: 23
+    description:
+      - "<gray>Channel arcane mystic powers into mundane items</gray>"
+      - "<gray>and manipulate enchanted runes.</gray>"
+    xp_rewards:
+      xp_cost_multiplier: 18.0
+      grindstone_disenchant: 15.0
+
+  alchemy:
+    name: "<gradient:#a80077:#66ff00><bold>Alchemy</bold></gradient>"
+    icon: BREWING_STAND
+    slot: 24
+    description:
+      - "<gray>Brew potent concoctions, synthesize curative</gray>"
+      - "<gray>elixirs, and unlock volatile chemical reactions.</gray>"
+    xp_rewards:
+      potion_brewed: 45.0

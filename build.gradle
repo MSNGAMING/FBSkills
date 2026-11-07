@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version '8.3.3'
+}
+
+group = 'com.fbskills'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "papermc"
+        url = "https://repo.papermc.io/repository/maven-public/"
+    }
+    maven {
+        name = "placeholderapi"
+        url = "https://repo.extendedclip.com/content/repositories/placeholderapi/"
+    }
+    maven {
+        name = "jitpack"
+        url = "https://jitpack.io"
+    }
+}
+
+dependencies {
+    compileOnly "io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT"
+    compileOnly "me.clip:placeholderapi:2.11.6"
+    compileOnly "com.github.MilkBowl:VaultAPI:1.7.1"
+
+    // High-performance database connection pool
+    implementation "com.zaxxer:HikariCP:5.1.0"
+    // JDBC drivers for SQLite and MySQL
+    implementation "org.xerial:sqlite-jdbc:3.46.0.0"
+    implementation "com.mysql:mysql-connector-j:8.4.0"
+    implementation "org.slf4j:slf4j-simple:2.0.13"
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    relocate 'com.zaxxer.hikari', 'com.fbskills.libs.hikari'
+    relocate 'org.sqlite', 'com.fbskills.libs.sqlite'
+    relocate 'com.mysql', 'com.fbskills.libs.mysql'
+    relocate 'org.slf4j', 'com.fbskills.libs.slf4j'
+}
+
+tasks.build {
+    dependsOn shadowJar
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}

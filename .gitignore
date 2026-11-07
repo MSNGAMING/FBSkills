@@ -1,0 +1,22 @@
+# Gradle build artifacts and caches
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE specific files
+.idea/
+*.iml
+.vscode/
+*.ipr
+*.iws
+
+# Runtime data & local databases
+skills.db
+skills.db-*
+userdata/
+logs/
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db

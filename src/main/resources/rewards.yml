@@ -1,0 +1,86 @@
+# ==============================================================================
+# FBSkills - Level Progression Rewards & Passive Perks
+# ==============================================================================
+
+# Global rewards applied to any skill reaching these milestones
+global_milestones:
+  5:
+    description: "<green>+5% Extra XP boost across all actions</green>"
+    money: 250.0
+    commands:
+      - "give %player% experience_bottle 5"
+  10:
+    description: "<green>+1000 Coins and Miner's Blessing</green>"
+    money: 1000.0
+    commands:
+      - "tellraw %player% {\"text\":\"You reached Level 10 in %skill%!\",\"color\":\"gold\"}"
+  25:
+    description: "<gold>Milestone Perk: Novice Adventurer</gold>"
+    money: 5000.0
+    commands:
+      - "give %player% golden_apple 3"
+  50:
+    description: "<gradient:#ff0844:#ffb199><bold>Mastery Perk: Elite Champion</bold></gradient>"
+    money: 25000.0
+    commands:
+      - "give %player% diamond 10"
+      - "give %player% netherite_scrap 1"
+
+# Specific Skill Milestones
+skills:
+  mining:
+    10:
+      description: "<aqua>Passive: 10% Double Drop Chance on Coal & Copper</aqua>"
+      commands:
+        - "give %player% iron_ingot 16"
+    25:
+      description: "<aqua>Passive: 15% Double Drop Chance on Iron & Gold</aqua>"
+      commands:
+        - "give %player% diamond 5"
+    50:
+      description: "<gold>Passive: Master Prospector (Double Diamonds)</gold>"
+      commands:
+        - "give %player% netherite_ingot 1"
+
+  farming:
+    10:
+      description: "<green>Passive: 15% Double Crop Yield</green>"
+      commands:
+        - "give %player% emerald 10"
+    25:
+      description: "<green>Passive: 30% Double Crop Yield</green>"
+      commands:
+        - "give %player% emerald 25"
+
+  defense:
+    10:
+      description: "<yellow>Passive: +1 Bonus Max Heart (Permanent)</yellow>"
+      modifier:
+        attribute: "max_health"
+        amount: 2.0
+      commands: []
+    25:
+      description: "<yellow>Passive: +2 Bonus Max Hearts (Permanent)</yellow>"
+      modifier:
+        attribute: "max_health"
+        amount: 4.0
+      commands: []
+
+  fighting:
+    10:
+      description: "<red>Passive: +5% Melee Attack Damage</red>"
+      commands:
+        - "give %player% iron_sword 1"
+    25:
+      description: "<red>Passive: +10% Melee Attack Damage</red>"
+      commands:
+        - "give %player% diamond_sword 1"
+
+  agility:
+    10:
+      description: "<aqua>Passive: +5% Movement Speed</aqua>"
+      commands:
+        - "give %player% potion 1"
+    25:
+      description: "<aqua>Passive: +10% Movement Speed & Feather Falling</aqua>"
+      commands: []

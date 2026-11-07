@@ -1,0 +1,82 @@
+# ==============================================================================
+# FBSkills - Core Configuration
+# High-Performance Multi-Platform Skill & Progression Engine
+# Fully compatible with Paper, Purpur, and Folia (1.21 - 26.3+)
+# ==============================================================================
+
+# Data Storage Engine Settings
+storage:
+  # Supported types: SQLITE, MYSQL, YAML
+  # - YAML: Suitable for small servers; profiles stored as flat-files in userdata/
+  # - SQLITE: Zero-setup SQL database backed by HikariCP (recommended for single instances)
+  # - MYSQL: High-concurrency relational database (recommended for large networks / Bungee / Velocity)
+  type: SQLITE
+
+  mysql:
+    host: localhost
+    port: 3306
+    database: fbskills
+    username: root
+    password: ""
+    # HikariCP Connection Pool Settings
+    pool:
+      maximum-pool-size: 10
+      minimum-idle: 3
+      connection-timeout-ms: 10000
+      idle-timeout-ms: 600000
+      max-lifetime-ms: 1800000
+    ssl: false
+
+# Leveling Formula & Progression Parameters
+# Progression Formula: Required XP = base_xp * (level ^ multiplier)
+leveling:
+  base_xp: 100.0
+  multiplier: 1.28
+  max_level: 100
+
+# Permission-based XP Multipliers
+multipliers:
+  enabled: true
+  permissions:
+    "fbskills.multiplier.vip": 1.20
+    "fbskills.multiplier.mvp": 1.50
+    "fbskills.multiplier.elite": 2.00
+
+# Anti-Exploit & Mining Safeguards
+anti_exploit:
+  # Whether Silk Touch tools grant mining XP on ores (false prevents silk-break exploits)
+  allow_silk_touch_ore_xp: false
+  # Track piston movements to prevent pushing placed blocks to bypass tracker
+  track_piston_movements: true
+
+# Optimization & Caching Settings
+cache:
+  # Interval in seconds between background dirty profile flushes
+  auto_save_interval_seconds: 300
+  # How long leaderboard rankings remain in memory before querying storage
+  leaderboard_cache_seconds: 120
+  # Duration in minutes to track placed blocks to prevent place/break exploit
+  placed_blocks_tracker_ttl_minutes: 120
+
+# Notifications & Visual Feedback
+notifications:
+  actionbar:
+    enabled: true
+    # MiniMessage format
+    format: "<gradient:#00ff87:#60efff>+<amount> XP</gradient> <dark_gray>•</dark_gray> <gray><skill></gray> <dark_gray>[<yellow>Lvl <level></yellow> <white><percent>%</white>]</dark_gray>"
+  
+  levelup:
+    sound_enabled: true
+    sound: "ui.toast.challenge_complete"
+    volume: 1.0
+    pitch: 1.0
+    title_enabled: true
+    title: "<gradient:#ffd700:#ffaa00><bold>LEVEL UP!</bold></gradient>"
+    subtitle: "<yellow><skill></yellow> is now level <gold><level></gold>!"
+    broadcast_milestones: [10, 25, 50, 75, 100]
+    broadcast_message: "<gradient:#00e5ff:#1200ff><bold>[FBSKILLS]</bold></gradient> <aqua><player></aqua> has reached <gold><skill> Level <level></gold>!"
+
+# Cooldowns (in milliseconds) for high-frequency actions to prevent lag / macro exploits
+cooldowns:
+  agility_sprint_ms: 1500
+  defense_hit_ms: 500
