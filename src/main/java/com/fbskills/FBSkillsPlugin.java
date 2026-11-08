@@ -74,10 +74,7 @@ public final class FBSkillsPlugin extends JavaPlugin {
         // 7. Event Listeners Registration
         registerListeners();
 
-        // 8. Command Registration (Core command: /skills)
-        registerCommands();
-
-        // 9. Ecosystem Hooks (Vault & PlaceholderAPI)
+        // 8. Ecosystem Hooks (Vault & PlaceholderAPI)
         this.vaultHook = new VaultHook(this);
         hookPlaceholderAPI();
 
@@ -195,16 +192,6 @@ public final class FBSkillsPlugin extends JavaPlugin {
         pm.registerEvents(new ForgingListener(this), this);
         pm.registerEvents(new EnchantingListener(this), this);
         pm.registerEvents(new AlchemyListener(this), this);
-    }
-
-    private void registerCommands() {
-        PluginCommand cmd = getCommand("skills");
-        if (cmd != null) {
-            SkillsCommand handler = new SkillsCommand(this);
-            cmd.setExecutor(handler);
-            cmd.setTabCompleter(handler);
-        }
-        // Native Paper mode: registered during bootstrap via LifecycleEvents.COMMANDS
     }
 
     private void hookPlaceholderAPI() {
