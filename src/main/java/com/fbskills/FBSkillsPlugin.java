@@ -203,9 +203,8 @@ public final class FBSkillsPlugin extends JavaPlugin {
             SkillsCommand handler = new SkillsCommand(this);
             cmd.setExecutor(handler);
             cmd.setTabCompleter(handler);
-        } else {
-            getLogger().log(Level.SEVERE, "Failed to register /skills command! Is it declared in plugin.yml?");
         }
+        // Native Paper mode: registered during bootstrap via LifecycleEvents.COMMANDS
     }
 
     private void hookPlaceholderAPI() {

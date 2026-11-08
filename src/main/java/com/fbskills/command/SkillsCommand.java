@@ -5,6 +5,8 @@ import com.fbskills.model.LeaderboardEntry;
 import com.fbskills.model.PlayerProfile;
 import com.fbskills.model.SkillType;
 import com.fbskills.util.TextUtil;
+import io.papermc.paper.command.brigadier.BasicCommand;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,24 +19,56 @@ import java.util.*;
 
 /**
  * Handles all in-game commands and tab-completion for FBSkills.
+ * Supports Paper's native BasicCommand and legacy CommandExecutor.
  * Core command: /skills
  */
-public class SkillsCommand implements CommandExecutor, TabCompleter {
+public class SkillsCommand implements BasicCommand, CommandExecutor, TabCompleter {
 
-    private final FBSkillsPlugin plugin;
+    private FBSkillsPlugin plugin;
+
+    public SkillsCommand() {
+        this.plugin = null;
+    }
 
     public SkillsCommand(FBSkillsPlugin plugin) {
         this.plugin = plugin;
     }
 
+    private FBSkillsPlugin getPlugin() {
+        if (this.plugin == null) {
+            this.plugin = FBSkillsPlugin.getInstance();
+        }
+        return this.plugin;
+    }
+
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public void execute(@NotNull CommandSourceStack stack, @NotNull String[] args) {
+        onCommand(stack.getSender(), null, "skills", args);
+    }
+
+    @Override
+    public Collection<String> suggest(@NotNull CommandSourceStack stack, @NotNull String[] args) {
+        return onTabComplete(stack.getSender(), null, "skills", args);
+    }
+
+    @Override
+    public boolean canUse(@NotNull CommandSender sender) {
+        return sender.hasPermission("fbskills.use");
+    }
+
+    @Override
+    public String permission() {
+        return "fbskills.use";
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage(TextUtil.parse("<red>Only in-game players can view the skills GUI.</red>"));
                 return true;
             }
-            plugin.getGuiManager().openMainMenu(player);
+            getPlugin().getGuiManager().openMainMenu(player);
             return true;
         }
 
@@ -50,7 +84,7 @@ public class SkillsCommand implements CommandExecutor, TabCompleter {
                 // If user typed a skill directly (e.g. /skills mining)
                 SkillType.fromId(sub).ifPresentOrElse(skill -> {
                     if (sender instanceof Player player) {
-                        plugin.getGuiManager().openSkillDetail(player, skill);
+                        getPlugin().getGuiManager().openSkillDetail(player, skill);
                     } else {
                         handleTop(sender, new String[]{"top", sub});
                     }
@@ -78,7 +112,7 @@ public class SkillsCommand implements CommandExecutor, TabCompleter {
         SkillType skill = skillOpt.get();
         sender.sendMessage(TextUtil.parse("<gray>Fetching top 10 rankings for <yellow>" + skill.getDefaultDisplayName() + "</yellow>...</gray>"));
 
-        plugin.getStorageManager().getLeaderboard(skill, 10).thenAccept(entries -> {
+        getPlugin().getStorageManager().getLeaderboard(skill, 10).thenAccept(entries -> {
             sender.sendMessage(TextUtil.parse("<gradient:#ffd700:#ffaa00><bold>=== Top 10 " + skill.getDefaultDisplayName() + " Leaderboard ===</bold></gradient>"));
             if (entries.isEmpty()) {
                 sender.sendMessage(TextUtil.parse("<gray>No ranked player data available yet.</gray>"));
@@ -134,7 +168,7 @@ public class SkillsCommand implements CommandExecutor, TabCompleter {
         }
 
         SkillType skill = skillOpt.get();
-        plugin.awardXp(target, skill, amount);
+        getPlugin().awardXp(target, skill, amount);
         sender.sendMessage(TextUtil.parse("<green>Granted <aqua>" + TextUtil.formatDouble(amount) + " XP</aqua> in <yellow>" + skill.getDefaultDisplayName() + "</yellow> to <gold>" + target.getName() + "</gold>!</green>"));
     }
 
@@ -164,8 +198,8 @@ public class SkillsCommand implements CommandExecutor, TabCompleter {
         int newLevel;
         try {
             newLevel = Integer.parseInt(args[3]);
-            if (newLevel < 1 || newLevel > plugin.getConfigManager().getMaxLevel()) {
-                sender.sendMessage(TextUtil.parse("<red>Level must be between 1 and " + plugin.getConfigManager().getMaxLevel() + ".</red>"));
+            if (newLevel < 1 || newLevel > getPlugin().getConfigManager().getMaxLevel()) {
+                sender.sendMessage(TextUtil.parse("<red>Level must be between 1 and " + getPlugin().getConfigManager().getMaxLevel() + ".</red>"));
                 return;
             }
         } catch (NumberFormatException e) {
@@ -174,7 +208,7 @@ public class SkillsCommand implements CommandExecutor, TabCompleter {
         }
 
         SkillType skill = skillOpt.get();
-        PlayerProfile profile = plugin.getStorageManager().getProfile(target.getUniqueId());
+        PlayerProfile profile = getPlugin().getStorageManager().getProfile(target.getUniqueId());
         if (profile == null) {
             sender.sendMessage(TextUtil.parse("<red>Target player profile is not loaded.</red>"));
             return;
@@ -185,7 +219,7 @@ public class SkillsCommand implements CommandExecutor, TabCompleter {
         profile.setXp(skill, 0.0);
 
         if (newLevel > oldLevel) {
-            plugin.getRewardManager().processLevelUp(target, skill, oldLevel, newLevel);
+            getPlugin().getRewardManager().processLevelUp(target, skill, oldLevel, newLevel);
         }
 
         sender.sendMessage(TextUtil.parse("<green>Set <gold>" + target.getName() + "'s</gold> <yellow>" + skill.getDefaultDisplayName() + "</yellow> level to <aqua>" + newLevel + "</aqua>!</green>"));
@@ -197,7 +231,7 @@ public class SkillsCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        plugin.reload();
+        getPlugin().reload();
         sender.sendMessage(TextUtil.parse("<green>FBSkills configurations and rewards reloaded successfully!</green>"));
     }
 
@@ -217,7 +251,7 @@ public class SkillsCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1) {
             List<String> sub = new ArrayList<>(List.of("top", "help"));
             if (sender.hasPermission("fbskills.admin")) {
