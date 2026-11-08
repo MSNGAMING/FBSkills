@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -101,13 +102,11 @@ public class SqlStorage implements StorageEngine {
         String createIndex = "CREATE INDEX IF NOT EXISTS idx_fbskill_leaderboard ON fbskills_data (skill_type, level DESC, xp DESC);";
 
         try (Connection con = dataSource.getConnection();
-             PreparedStatement st1 = con.prepareStatement(createPlayers);
-             PreparedStatement st2 = con.prepareStatement(createSkills);
-             PreparedStatement st3 = con.prepareStatement(createIndex)) {
-            st1.executeUpdate();
-            st2.executeUpdate();
+             Statement st = con.createStatement()) {
+            st.executeUpdate(createPlayers);
+            st.executeUpdate(createSkills);
             try {
-                st3.executeUpdate();
+                st.executeUpdate(createIndex);
             } catch (SQLException ignored) {
                 // Some MySQL engines handle index already exists differently
             }
@@ -115,14 +114,27 @@ public class SqlStorage implements StorageEngine {
 
         // Seamless legacy data migration from smp_skills_* if they exist
         try (Connection con = dataSource.getConnection()) {
-            try (PreparedStatement migratePlayers = con.prepareStatement(
-                    "INSERT OR IGNORE INTO fbskills_players SELECT * FROM smp_skills_players;")) {
-                migratePlayers.executeUpdate();
-            } catch (Exception ignored) {}
-            try (PreparedStatement migrateData = con.prepareStatement(
-                    "INSERT OR IGNORE INTO fbskills_data SELECT * FROM smp_skills_data;")) {
-                migrateData.executeUpdate();
-            } catch (Exception ignored) {}
+            var meta = con.getMetaData();
+            boolean hasLegacyPlayers = false;
+            boolean hasLegacyData = false;
+
+            try (ResultSet rs = meta.getTables(null, null, "smp_skills_players", null)) {
+                if (rs.next()) hasLegacyPlayers = true;
+            }
+            try (ResultSet rs = meta.getTables(null, null, "smp_skills_data", null)) {
+                if (rs.next()) hasLegacyData = true;
+            }
+
+            if (hasLegacyPlayers || hasLegacyData) {
+                try (Statement st = con.createStatement()) {
+                    if (hasLegacyPlayers) {
+                        st.executeUpdate("INSERT OR IGNORE INTO fbskills_players SELECT * FROM smp_skills_players;");
+                    }
+                    if (hasLegacyData) {
+                        st.executeUpdate("INSERT OR IGNORE INTO fbskills_data SELECT * FROM smp_skills_data;");
+                    }
+                } catch (Exception ignored) {}
+            }
         }
     }
 

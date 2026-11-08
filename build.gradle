@@ -41,17 +41,16 @@ dependencies {
     // High-performance database connection pool
     implementation "com.zaxxer:HikariCP:5.1.0"
     // JDBC drivers for SQLite and MySQL
-    implementation "org.xerial:sqlite-jdbc:3.46.0.0"
+    implementation "org.xerial:sqlite-jdbc:3.49.1.0"
     implementation "com.mysql:mysql-connector-j:8.4.0"
-    implementation "org.slf4j:slf4j-simple:2.0.13"
 }
 
 shadowJar {
     archiveClassifier.set('')
+    mergeServiceFiles()
     relocate 'com.zaxxer.hikari', 'com.fbskills.libs.hikari'
     relocate 'org.sqlite', 'com.fbskills.libs.sqlite'
     relocate 'com.mysql', 'com.fbskills.libs.mysql'
-    relocate 'org.slf4j', 'com.fbskills.libs.slf4j'
 }
 
 tasks.build {
